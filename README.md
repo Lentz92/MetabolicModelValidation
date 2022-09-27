@@ -1,6 +1,11 @@
 # MetabolicModelValidation
 The following scripts was used for a trend validation study between indirect calorimetry and metabolic models for muscuskeletal modeling.
 
+**Lentz-Nielsen, Nicki**., Boysen, Mads., Munk-Hansen, Mathias., Steffensen, Mike., Laursen, Andreas.,
+Engelund, Bjørn., Iversen, Kristoffer., & de Zee, Mark. (2022). Trend validation of metabolic models
+against measurements using indirect calorimetry. *Abstract published for Danish biomechanical
+association annual meeting and is currently under peer-review.*
+
 ## Abstract
 The purpose of this study was to trend validate the metabolic models: Margaria
 (1968), Bhargava et al. (2004) and Umberger (2010) implemented in the Anybody
