@@ -1,5 +1,5 @@
 ---
-title: "00-DataCleaning"
+title: "00-EDAofOxygen"
 format: html
 editor: visual
 editor_options: 
@@ -21,7 +21,7 @@ contraction <- c(rep("CON",4), rep("EXC",4),rep("CON",4), rep("EXC",4),
 Load <- c(20,40,60,80,20,40,60,80,20,40,60,80,20,40,60,80,20,40,60,80,
           20,40,60,80,20,40,60,80,20,40,60,80,20,40,60,80,20,40,60,80)
 
-path = "../data/rawData/vynFixed/"
+path = "../data/rawData/vyn/"
 path_allSubjects <- list.files(path = path, pattern = ".csv", full.names = TRUE)
 data <- path_allSubjects %>% 
   map(~data.table::fread(., skip = 2))
@@ -62,78 +62,10 @@ for (i in 1:length(data)){
   #imputating missing values based on the nearest points and weighted by an exponential factor.
   data[[i]] <- imputeTS::na_ma(data[[i]], k = 3, weighting = "exponential")
   
-  data.table::fwrite(data[[i]], path_allSubjects[[i]])
+  #data.table::fwrite(data[[i]], path_allSubjects[[i]])
   
 }
 
 df <- data %>% 
   bind_rows()
-```
-
-```{r}
-df %>% 
-  mutate(Load = as.factor(Load)) %>% 
-  group_by(Subject, Contraction) %>% 
-  mutate(idx = row_number()) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = idx, y = VE, color = Load)) + 
-  geom_line(alpha = 0.5, size = 0.5) + 
-  geom_smooth(se = FALSE) + 
-  facet_grid(Contraction ~ Subject, scale = "free") + 
-  theme(legend.position = "top") + 
-  labs(x = "Index axis",
-       y = "VE",
-       color = "Load in Newton")
-
-ggsave(file="VEplot.png", width=14, height=8, dpi = 1200)
-
-
-df %>% 
-  mutate(Load = as.factor(Load)) %>% 
-  group_by(Subject, Contraction) %>% 
-  mutate(idx = row_number()) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = idx, y = VO2, color = Load)) + 
-  geom_line(alpha = 0.5, size = 0.5) + 
-  geom_smooth(se = FALSE) + 
-  facet_grid(Contraction ~ Subject, scale = "free") + 
-  theme(legend.position = "top") + 
-  labs(x = "Index axis",
-       y = "VO2",
-       color = "Load in Newton")
-
-df %>% 
-  mutate(Load = as.factor(Load)) %>% 
-  group_by(Subject, Contraction) %>% 
-  mutate(idx = row_number()) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = idx, y = VCO2, color = Load)) + 
-  geom_line(alpha = 0.5, size = 0.5) + 
-  geom_smooth(se = FALSE) + 
-  facet_grid(Contraction ~ Subject, scale = "free") + 
-  theme(legend.position = "top") + 
-  labs(x = "Index axis",
-       y = "VCO2",
-       color = "Load in Newton")
-
-df %>% 
-  mutate(Load = as.factor(Load)) %>% 
-  group_by(Subject, Contraction) %>% 
-  mutate(idx = row_number()) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = idx, y = RER, color = Load)) + 
-  geom_line(alpha = 0.5, size = 0.5) + 
-  geom_smooth(se = FALSE) + 
-  geom_hline(yintercept=1, color = "red", size = 1.25) + 
-  facet_grid(Contraction ~ Subject, scale = "free") + 
-  theme(legend.position = "top") + 
-  labs(x = "Index axis",
-       y = "RER",
-       color = "Load in Newton") + 
-  ylim(0.5, 1.25)
-
-ggsave(file="RERplot.png", width=14, height=8, dpi = 1200)
-  
-
-
 ```

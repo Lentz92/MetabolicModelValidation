@@ -2,8 +2,7 @@
 The following scripts was used for a trend validation study between indirect calorimetry and metabolic models for muscuskeletal modeling.
 
 **Lentz-Nielsen, Nicki**., Boysen, Mads., Munk-Hansen, Mathias., Steffensen, Mike., Laursen, Andreas.,
-Engelund, Bjørn., Iversen, Kristoffer., & de Zee, Mark. (2022). Trend validation of metabolic models
-against measurements using indirect calorimetry. *Abstract published for Danish biomechanical
+Engelund, Bjørn., Iversen, Kristoffer., & de Zee, Mark. (2022). Validation of Metabolic Models for Estimation of Energy Expenditure during Isolated Concentric and Eccentric Contractions. *Abstract published for Danish biomechanical
 association annual meeting and is currently under peer-review.*
 
 ## Abstract
