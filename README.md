@@ -6,11 +6,14 @@ Engelund, Bjørn., Iversen, Kristoffer., & de Zee, Mark. (2022). Validation of M
 association annual meeting and is currently under peer-review.*
 
 ## Abstract
-The purpose of this study was to trend validate the metabolic models: Margaria
+The purpose of this study was to validate the metabolic models: Margaria
 (1968), Bhargava et al. (2004) and Umberger (2010) implemented in the Anybody
 Modeling System, performing a concentric knee extension and eccentric knee flexion at different mechanical loads in a dynamometer. Each load consisted of 150
 repetitions and pulmonary gas exchange was measured during each load. All three models underestimated the metabolic power compared to indirect calorimetry for
 both contraction types. Where the error for all metabolic models increased with the load.
+
+### KneeExntesionScripts
+A folder containing all the code for the musculoskeletal model that replicated the experimental setup of isolated leg contractions.
 
 ### 00-DataCleaning.qmd: 
 This script cleans the data as there are errors from the pulmonary gas exchange system. NA values, differences in time format and numeric / character columns.
