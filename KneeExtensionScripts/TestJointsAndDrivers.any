@@ -1,0 +1,171 @@
+
+// Center of Mass drivers can be excluded
+// by setting #define EXCLUDE_COM_BALANCE_DRIVERS
+#ifndef EXCLUDE_COM_BALANCE_DRIVERS
+
+//Constrain the collective CoM to be right above the GlobalRef
+AnyKinDriver CenterOfMassDriver = {
+  AnyKinMeasure& CoM = ..BodyModel.Interface.CenterOfMass;
+  AnyFunConst Position = {
+    Value = Main.Model.CenterOfMassXZ;
+  };
+  MeasureOrganizer = {0,2};  // Only the x and z directions
+  Reaction.Type = {Off,Off};
+  
+};
+// Ankles are assigned a lower weight so most of the
+// center of mass balancing will happen at the ankle joint. 
+Main.Model.DefaultMannequinDrivers.DefaultWeakDriverWeight = 0.01;
+Main.Model.DefaultMannequinDrivers.AnkleDriverLeftFlexion.WeakDriverWeight = 0.001;
+Main.Model.DefaultMannequinDrivers.AnkleDriverRightFlexion.WeakDriverWeight = 0.001;
+
+#endif
+
+
+
+// Foot driver constraints can be excluded
+// by setting #define EXCLUDE_FOOT_CONSTRAINTS
+#ifndef EXCLUDE_FOOT_CONSTRAINTS
+
+// Default drivers for the pelvis position is set to zero 
+// since foot drivers determines position of the model
+Main.Model.DefaultMannequinDrivers.PelvisGroundDriverPosX.WeakDriverWeight = 0;
+Main.Model.DefaultMannequinDrivers.PelvisGroundDriverPosY.WeakDriverWeight = 0;
+Main.Model.DefaultMannequinDrivers.PelvisGroundDriverPosZ.WeakDriverWeight = 0;
+Main.Model.DefaultMannequinDrivers.PelvisGroundDriverRotX.WeakDriverWeight = 0;
+Main.Model.DefaultMannequinDrivers.PelvisGroundDriverRotY.WeakDriverWeight = 0;
+Main.Model.DefaultMannequinDrivers.PelvisGroundDriverRotZ.WeakDriverWeight = 0;
+
+
+AnyFolder Right = 
+{   
+  AnyKinEq HeelFloorConstraint = {     
+    AnyKinLinear HeelMeasure = {
+      AnyRefFrame &FootPrint = Main.Model.Environment.GlobalRef.RightFootPrint;
+      AnyRefFrame &Heel = Main.HumanModel.BodyModel.Right.Leg.Seg.Foot.HeelContactNodeLow;
+    };
+    Reaction.Type = {Off,Off,Off};
+  }; 
+  
+  AnyKinEq ToeDirectionContraint =
+  {
+    AnyKinLinear ToeDirection = {
+      AnyRefFrame &FootPrint = Main.Model.Environment.GlobalRef.RightFootPrint;
+      AnyRefFrame &Heel = Main.HumanModel.BodyModel.Right.Leg.Seg.Foot.BigToeNode;
+    };
+    MeasureOrganizer = {1,2}; // Only y,z direction
+    Reaction.Type = {Off,Off};
+  };
+};
+
+AnyFolder Left = 
+{    
+  AnyKinEq HeelFloorConstraint = {     
+    AnyKinLinear HeelMeasure = {
+      AnyRefFrame &FootPrint = Main.Model.Environment.GlobalRef.LeftFootPrint;
+      AnyRefFrame &Heel = Main.HumanModel.BodyModel.Left.Leg.Seg.Foot.HeelContactNodeLow;
+    };
+    Reaction.Type = {Off,Off,Off};
+  }; 
+  
+  AnyKinEq ToeDirectionConstraint =
+  {
+    AnyKinLinear ToeDirection = {
+      AnyRefFrame &FootPrint = Main.Model.Environment.GlobalRef.LeftFootPrint;
+      AnyRefFrame &Heel = Main.HumanModel.BodyModel.Left.Leg.Seg.Foot.BigToeNode;
+    };
+    MeasureOrganizer = {1,2}; // Only y,z direction
+    Reaction.Type = {Off,Off};
+  };
+};
+
+#endif
+
+//Setting Reaction forces for the 6 DOF for the pelvis
+Main.HumanModel.DefaultMannequinDrivers.PelvisGroundDriverPosX.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.PelvisGroundDriverPosY.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.PelvisGroundDriverPosZ.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.PelvisGroundDriverRotX.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.PelvisGroundDriverRotY.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.PelvisGroundDriverRotZ.Reaction.Type = {On};
+
+//Setting reaction forces for the hipdriver
+Main.HumanModel.DefaultMannequinDrivers.HipDriverRightFlexion.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.HipDriverRightExternalRotation.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.HipDriverRightAbduction.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.HipDriverLeftFlexion.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.HipDriverLeftExternalRotation.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.HipDriverLeftAbduction.Reaction.Type = {On};
+
+//setting reaction forces for the skull
+Main.HumanModel.DefaultMannequinDrivers.SkullThoraxFlexionDriver.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.SkullThoraxLateralBendingDriver.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.SkullThoraxRotationDriver.Reaction.Type = {On};
+
+//Setting reaction forces for the GHD
+Main.HumanModel.DefaultMannequinDrivers.GHDriverLeftAbduction.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.GHDriverLeftFlexion.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.GHDriverLeftExternalRotation.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.GHDriverRightAbduction.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.GHDriverRightFlexion.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.GHDriverRightExternalRotation.Reaction.Type = {On};
+
+//Setting reaction forces for the elbow
+Main.HumanModel.DefaultMannequinDrivers.ElbowFlexionDriverRight.Reaction.Type = {On};
+Main.HumanModel.DefaultMannequinDrivers.ElbowFlexionDriverLeft.Reaction.Type = {On};
+
+
+//Setting reaction force for the thorax
+//This locks the thorax region in place, so no muscle forces is needed to keep it upright
+AnyReacForce ThoraxReacForce = 
+{
+  AnyKinLinear ThoraxLin = {
+    AnyRefFrame &ThoraxMeasure = Main.HumanModel.BodyModel.Trunk.SegmentsThorax.ThoraxSeg;
+    Ref = -1;
+  };
+  //Which axis we wanna lock - x,y,z
+  Type = {On, On, On};
+};
+
+
+AnyKinEqInterPolDriver KneeJointDriver = {
+  
+  Type = Bspline;
+  BsplineOrder = 4;
+  FileName = "..\Input\testposition.txt";
+
+  AnyKinMeasure &Knee = Main.HumanModel.BodyModel.Interface.Right.KneeFlexion;
+};
+
+
+//Placing a node on the shank
+Main.HumanModel.BodyModel.Right.Leg.Seg.Shank = {
+  AnyRefNode RefNodeShank = 
+  {
+    sRel = {0.0, 0.02, 0.0};
+    AnyDrawRefFrame DrwNode = {
+      RGB = {0.9, 0.75, 0.06};
+      ScaleXYZ = {0.3, 0.3, 0.3};
+    };
+  };
+};
+
+//Placing a force on the refnode
+AnyForce3D ShankForce = {
+  viewForce = {
+    Visible = On;
+    Opacity = 1.0;
+    ReactionForceColor = {0.8, 0.3, 0.3};
+    AppliedForceColor = {0.3, 0.8, 0.3};
+    ScaleToView = On;
+  };
+  AnyFunInterpol force = {
+    Type = Bspline;
+    BsplineOrder = 4;
+    FileName = "..\Input\test.txt";
+  };
+  Flocal = force(t);
+  AnyRefFrame &ForceOnShank = Main.HumanModel.BodyModel.Right.Leg.Seg.Shank.RefNodeShank;
+};
+
+

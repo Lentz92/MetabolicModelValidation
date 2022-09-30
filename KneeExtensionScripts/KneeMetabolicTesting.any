@@ -1,0 +1,88 @@
+/* 
+Metabolic models to test
+Contains different versions of the available met models in AMS
+
+Pmet contributions for artificial muscles is switched off by a define in
+ammr/Body/AAUHumanModel/BodyModels/GenericBodyModel/Helper.ClassTemplates.any
+*/ 
+
+#ifndef METMODEL
+#define METMODEL "simple"
+#endif
+
+// Set metabolic model for regular Pmet in the study
+#if METMODEL == "simple"
+MetabolicModel = &MetMdlSimple;
+#endif
+#if METMODEL == "bhargava"
+MetabolicModel = &MetMdlBhar;
+#endif
+#if METMODEL == "umberger"
+MetabolicModel = &MetMdlUmb;
+#endif
+
+// Metabolic models with default values
+AnyMetabModelSimple MetMdlSimple = {
+  EtaCon = 0.25;
+  EtaEcc = -1.2;}; //Blue line
+
+AnyMetabModelB MetMdlBhar = {}; // Orange line
+AnyMetabModelU MetMdlUmb = {}; //Green line
+
+// Array of metabolic models to test using Pmet2
+AnyObjectPtrArray MetModelsPtrArray = {
+  &MetMdlSimple, 
+  //&MetMdlSimpleA,
+  //&MetMdlSimpleB
+  &MetMdlBhar, 
+  &MetMdlUmb
+};
+
+
+// Set metabolic models for Pmet2
+MetabolicModel2 = MetModelsPtrArray;
+
+/* 
+To test the functionality of Pmet2 we search out all real muscles in the model.
+We point to the array for each of the metabolic models included in MetabolicModel2
+*/
+
+// Set muscles to be affected
+MetabolicMuscles2 = Met2Muscles;
+
+// Array of muscles to include for Pmet2
+AnyObjectPtrArray Met2Muscles = {
+  &AllBodyMuscles, 
+  &AllBodyMuscles,
+  &AllBodyMuscles
+};
+
+// Search functions to find both real and artificial muscles
+AnyObjectPtrArray AllMusclesInModel = ObjSearchRecursive("Main", "*", "AnyMuscle");
+AnyObjectPtrArray AnyMusclesInBodyModel = ObjSearchRecursive("Main.HumanModel.BodyModel", "*", "AnyMuscle");
+AnyObjectPtrArray EnvironmentAnyMuscles = ObjSearchRecursive("Main.EnvironmentModel", "*", "AnyMuscle");
+AnyObjectPtrArray ModelEnvironmentConnectionAnyMuscles = ObjSearchRecursive("Main.Studies", "*", "AnyMuscle");
+AnyObjectPtrArray BikeModelArtificialAnyMuscles = ObjSearchRecursive("Main.Model.SeatSupport", "*", "AnyMuscle");
+AnyObjectPtrArray ArtificialAnyMusclesInBody = set_difference(AnyMusclesInBodyModel, AllBodyMuscles);
+
+// Real BodyMuscles
+AnyObjectPtrArray Spine = ObjSearchRecursive("Main.HumanModel.BodyModel.Trunk.MusclesSpine", "*", "AnyMuscle");
+AnyObjectPtrArray SpineR = ObjSearchRecursive("Main.HumanModel.BodyModel.Trunk.MusclesSpineRight", "*", "AnyMuscle");
+AnyObjectPtrArray SpineL = ObjSearchRecursive("Main.HumanModel.BodyModel.Trunk.MusclesSpineLeft", "*", "AnyMuscle");
+AnyObjectPtrArray LegR = ObjSearchRecursive("Main.HumanModel.BodyModel.Right.Leg", "*", "AnyMuscle");
+AnyObjectPtrArray LegL = ObjSearchRecursive("Main.HumanModel.BodyModel.Left.Leg", "*", "AnyMuscle");
+AnyObjectPtrArray ArmR = ObjSearchRecursive("Main.HumanModel.BodyModel.Right.ShoulderArm.Mus", "*", "AnyMuscle");
+AnyObjectPtrArray ArmL = ObjSearchRecursive("Main.HumanModel.BodyModel.Left.ShoulderArm.Mus", "*", "AnyMuscle");
+// Array of all relevant body muscles
+AnyObjectPtrArray AllBodyMuscles = arrcat(Spine, SpineR, SpineL, LegR, LegL, ArmR, ArmL);
+
+// Check sum that we located all muscles
+AnyInt nMuscles = NumElemOf(AllMusclesInModel);
+AnyInt nMuscles2 = 
+  NumElemOf(AllBodyMuscles) +
+  NumElemOf(EnvironmentAnyMuscles) +
+  NumElemOf(ModelEnvironmentConnectionAnyMuscles) +
+  NumElemOf(ArtificialAnyMusclesInBody) +
+  NumElemOf(BikeModelArtificialAnyMuscles);
+
+AnyIntVar FoundAllMuscles = eqfun(nMuscles,nMuscles2);
