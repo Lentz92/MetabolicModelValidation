@@ -150,11 +150,11 @@ p2 <- df %>%
                      values = c("dodgerblue4","firebrick4")) + 
   theme_minimal() + 
   theme(legend.position = "top",
-        legend.key.size = unit(2.5,"cm"),
-        legend.title = element_text(size=16),
-        legend.text = element_text(size=16),
-        plot.title = element_text(size = 20, face='bold'),
-        plot.subtitle = element_text(size = 18)) + 
+        legend.key.size = unit(2,"cm"),
+        legend.title = element_text(size=14),
+        legend.text = element_text(size=14),
+        plot.title = element_text(size = 16, face='bold'),
+        plot.subtitle = element_text(size = 14)) + 
   ggtitle("Difference between Péronnet & Massicotte (1991) equation and Peronnet formula from Kipp et al. (2018)",
           subtitle = "y-axis shows metabolic energy produced relative to time and bodyweight")
 
