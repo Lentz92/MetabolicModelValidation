@@ -155,7 +155,7 @@ p2 <- df %>%
         legend.text = element_text(size=14),
         plot.title = element_text(size = 16, face='bold'),
         plot.subtitle = element_text(size = 14)) + 
-  ggtitle("Difference between Péronnet & Massicotte (1991) equation and Peronnet formula from Kipp et al. (2018)",
+  ggtitle("Difference between Péronnet & Massicotte (1991) formula from Kipp et al. (2018)",
           subtitle = "y-axis shows metabolic energy produced relative to time and bodyweight")
 
 ggsave(file="../resultater/PeronnetDifference.jpeg", plot = p2, width=10, height=8, dpi = 1200)
